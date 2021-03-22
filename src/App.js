@@ -24,7 +24,7 @@ export default class App extends Component {
             <ClientMain /> :
             <Main />
         }
-        <span style={{ fontSize: "12px" }} >powered by TixPros - V{this.state.version}</span>
+        <span style={{ fontSize: "12px" }} >powered by <a href = "https://tixpros.pro/" target="_blank" >TixPros</a> - V{this.state.version}</span>
         <br />
         <button
           style={{ fontSize: 12, padding: 2 }}
