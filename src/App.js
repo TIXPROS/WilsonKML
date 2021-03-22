@@ -13,7 +13,9 @@ export default class App extends Component {
     }
   }
 
-
+  componentDidMount() {
+    document.title = 'Wilson KML';
+  }
   render() {
     return (
       <div className="App">
