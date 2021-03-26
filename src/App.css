@@ -47,7 +47,7 @@ table {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 thead tr {
-  background-color: #009879;
+  background-color: #1a8cff;
   color: #ffffff;
   text-align: center;
   margin-left: 5px;
@@ -63,10 +63,10 @@ tbody tr:nth-of-type(even) {
   background-color: #f3f3f3;
 }
 tbody tr:last-of-type {
-  border-bottom: 2px solid #009879;
+  border-bottom: 2px solid #1a8cff;
 }
 button{
-    background: #009879;
+    background: #1a8cff;
     color: #fff;
     cursor: pointer;
     font-size: 1.2em;
@@ -78,7 +78,7 @@ button{
 }
 th {
   position: sticky;
-  background-color: #009879;
+  background-color: #1a8cff;
   top: 0; /* Don't forget this, required for the stickiness */
   z-index: 1;
 }

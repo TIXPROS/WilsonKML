@@ -1,32 +1,41 @@
-import { CircularProgress, Modal } from '@material-ui/core';
+import { Button, CircularProgress, Input, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
-import { Bar } from '@reactchartjs/react-chart.js'
+import { findVariableName, findVariableUnit } from '../constants/variableName' //Importation des fonctions permettant de retrouver les noms et les unités des variables 
 
 
-import { convert } from "./Parser";
+import { convert } from "./Parser";//Importation de l'extracteur redéfnie
+
+
+const sectionTitles = [
+    "All",
+    "Wind",
+    "Wind speed threshold",
+    "Wind gusts 1h",
+    "Wind gusts 3h",
+    "Temperature",
+    "Visibility",
+];
 class Main extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            filed: false,
-            data: [],
-            days: [],
-            finale: [],
-            keys: [],
-            loading: false,
-            modal: false,
-            current: {}
+            filed: false, //Controleur de l'existence d'un fichier chargé
+            data: [], //les lignes de données
+            days: [], //les jours
+            finale: [], //données compilées
+            keys: [], //les variables (PPPP et autres)
+            loading: false, //Controleur du chargement de la page
         }
     }
 
+    //Fonction de récupération de fichier
     showFile = async (e) => {
         e.preventDefault()
         const reader = new FileReader()
         reader.onload = async (e) => {
             const text = (e.target.result)
             var data = convert(text)
-            // console.log(data);
             if (data) {
                 this.setState({ data: data, filed: true })
             } else {
@@ -34,14 +43,16 @@ class Main extends Component {
             }
 
         };
-        reader.readAsText(e.target.files[0])
+        e.target.files[0] && reader.readAsText(e.target.files[0])
     }
+
+
+    //Fonction de compilation des données
     async range() {
         await new Promise(r => setTimeout(r, 3000));
         var days = []
         var final = []
         this.state.data.forEach(element => {
-            // console.log(element.date.split('T')[0]);
             var existed = days.indexOf(element.date.split('T')[0])
 
             if (existed === -1) {
@@ -52,6 +63,7 @@ class Main extends Component {
         this.setState({
             days: days
         }, () => {
+            //Extraction du Jour/Mois/Années des dates
             days.forEach((element) => {
                 var filteredHour = this.state.data.filter((el) => el.date.split('T')[0] === element)
                 var tmp = {}
@@ -60,115 +72,62 @@ class Main extends Component {
 
                 final.push(tmp);
             });
-            // console.log(final[0].values[0].values);
 
             this.setState({ finale: final, keys: Object.keys(final[0].values[0].values), loading: false }, () => { })
         })
-        console.log(final[0]);
     }
 
-
-    convertDate(date) {
-        var tmp = new Date(date)
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        var final = tmp.toLocaleDateString('fr-FR', options)
-        return (final.charAt(0).toUpperCase() + final.slice(1));
-        // console.log(tmp);
-    }
-
-
-    setChart(index, variable) {
-        // console.log(this.state.finale[0].values.filter((el) => {
-        //     return el.date
-        // }));
-        const labels = this.state.finale[this.state.current.index].values.map((el) => (el.date.split('T')[1].slice(0, 2) + "Z"))
-        const data = this.state.finale[this.state.current.index].values.map((el) => (el.values[this.state.current.variable]))
-
-        const state = {
-            labels: labels,
-            datasets: [
-                {
-                    label: this.state.current.variable,
-                    backgroundColor: '#f50057',
-                    // borderColor: 'rgba(0,0,0,1)',
-                    // borderWidth: 2,
-                    data: data
-                }
-            ]
-        }
-        return (
-            <Modal
-                open={() => { this.setState({ modal: true }) }}
-                onClose={() => { this.setState({ modal: false }) }}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                style={{
-                    position: 'absolute',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            >
-                {/* {body} */}
-                <div style={{ backgroundColor: '#fff', width: 800, borderColor: "#fff" }} >
-
-                    <button type="button" onClick={() => { this.setState({ modal: false }) }} style={{ backgroundColor: "red", alignSelf: "center", fontSize: 13, fontWeight: "bold" }} >Fermer</button>
-                    <Bar
-                        data={state}
-                        options={{
-                            title: {
-                                display: true,
-                                text: this.state.current.date,
-                                fontSize: 20
-                            },
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                            },
-                            legend: {
-                                display: true,
-                                position: 'right'
-                            }
-                        }}
-                    />
-                </div>
-            </Modal>
-        )
-
-    }
-
-    render = () => {
+    //Rendu visuel
+    render() {
 
         return (
             <div>
-                <h2>Convertisseur Kml to JS</h2>
-
-                <input type="file" onChange={(e) => this.showFile(e)} accept='.xml,.kml' />
-                {/* <DataTable
-                    title="Arnold Movies"
-                    columns={columns}
-                    data={this.state.data}
-                /> */}
-                <button title='Valider' onClick={() => {
-                    if (this.state.filed) {
-                        this.setState({ loading: true }, () => { this.range() })
-                    } else {
-                        alert('Veuillez choisir un fichier à convertir')
-                    }
-                }} >Valider</button>
+                <Typography variant="h3" component="h2">Convertisseur Kml to JS</Typography>
+                <Input type="file" onChange={(e) => this.showFile(e)} inputProps={{ accept: '.xml,.kml' }} style={{ marginTop: 20 }} />
+                <br />
+                <Button
+                    title='Valider'
+                    onClick={() => {
+                        if (this.state.filed) {
+                            this.setState({ loading: true }, () => { this.range() })
+                        } else {
+                            alert('Veuillez choisir un fichier à convertir')
+                        }
+                    }}
+                    color="primary"
+                    variant="contained"
+                    style={{ marginTop: 10 }}
+                >Valider</Button>
 
                 <div>
                     {
-                        this.state.loading && <CircularProgress color="secondary" />
+                        this.state.loading && <CircularProgress color="secondary" style={{ marginTop: 15 }} />
                     }
                 </div>
 
                 <div>
                     {
-                        this.state.filed && this.state.modal && this.state.finale.length > 0 && this.setChart()
+                        this.state.finale.length > 0 && this.state.filed &&
+                        <div style={{ display: "flex", flexDirection: "row" }} >
+
+                            <div style={styles.selector} >
+                                <InputLabel id="label">Location</InputLabel>
+                                <Select labelId="label" id="select" value="EBBR">
+                                    <MenuItem value="EBBR">EBBR</MenuItem>
+                                </Select>
+                            </div>
+
+                            <div style={styles.selector} >
+                                <InputLabel id="label">Parameter group</InputLabel>
+                                <Select labelId="label" id="select" value="All">
+                                    {
+                                        sectionTitles.map((el, index) => (
+                                            <MenuItem key={index} value={el}>{el}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            </div>
+                        </div>
                     }
                     {
                         <div >
@@ -177,24 +136,15 @@ class Main extends Component {
                                 <thead  >
                                     <tr>
                                         {
-                                            this.state.finale.length > 0 && this.state.filed && <th ></th>
+                                            this.state.finale.length > 0 && this.state.filed && <th style={{ top: 0 }} ></th>
                                         }
                                         {
-                                            this.state.finale.map((_el, index) => (
+                                            this.state.finale.map((_el) => (
                                                 _el.values.map((el, id) => (
-                                                    <th key={id} >{_el.date.slice(8, 10)}</th>
-                                                ))
-                                            ))
-                                        }
-                                    </tr>
-                                    <tr>
-                                        {
-                                            this.state.finale.length > 0 && this.state.filed && <th style={{ top: 40 }} ></th>
-                                        }
-                                        {
-                                            this.state.finale.map((_el, index) => (
-                                                _el.values.map((el, id) => (
-                                                    <th style={{ top: 40 }} key={id} >{el.date.split('T')[1].slice(0, 2) + "Z"}</th>
+                                                    <th style={{ top: 0 }} key={id} >
+                                                        {_el.date.slice(8, 10)}<br />
+                                                        {el.date.split('T')[1].slice(0, 2) + "Z"}
+                                                    </th>
                                                 ))
                                             ))
                                         }
@@ -204,12 +154,11 @@ class Main extends Component {
                                     {
                                         this.state.keys.map((elem, ind) => (
                                             <tr key={ind} >
-                                                <td style={{ fontWeight: 'bold', display: 'block' }} >
-                                                    {elem}
-                                                    {/* <br /><button type="button" onClick={() => { this.setState({ modal: true, current: { variable: elem, index: index, date: this.convertDate(_el.date) } }) }} style={{ backgroundColor: "#3f51b5", padding: 2, marginLeft: 5, alignSelf: "center", fontSize: 10, fontWeight: "bold", zIndex: 0 }} >Voir le graphe</button> */}
+                                                <td style={{ fontWeight: 'bold', color: "#fff", backgroundColor: "#1a8cff", left: 0, position: "sticky" }} >
+                                                    {findVariableName(elem) === false ? elem : (findVariableName(elem) + "\n(" + findVariableUnit(elem) + ")")}
                                                 </td>
                                                 {
-                                                    this.state.finale.map((_el, index) => (
+                                                    this.state.finale.map((_el) => (
                                                         _el.values.map((el, i) => (
                                                             <td key={i} >{el.values[elem] === "-" ? "N/A" : el.values[elem]}</td>
                                                         ))
@@ -225,6 +174,14 @@ class Main extends Component {
                 </div>
             </div>
         )
+    }
+}
+
+const styles = {
+    selector: {
+        displey: "flex",
+        flexDirection: 'row',
+        margin: 15
     }
 }
 
