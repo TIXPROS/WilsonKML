@@ -9,9 +9,6 @@ export default class App extends Component {
     return (
       <div className="App">
         <ClientMain />
-        {/* <div>
-          <Typography variant="body2">powered by <a href="https://tixpros.pro/" rel="noreferrer" target="_blank" >TixPros</a> - Version 1.0</Typography>
-        </div> */}
       </div>
     )
   }
