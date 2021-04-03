@@ -1,9 +1,10 @@
 import { Button, CircularProgress, Input, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import { findVariableName, findVariableUnit } from '../constants/variableName' //Importation des fonctions permettant de retrouver les noms et les unités des variables 
-
+import { findGroup } from "../constants/unityConvert"
 
 import { convert } from "./Parser";//Importation de l'extracteur redéfnie
+import { filter } from "../constants/filter";//Importation de la fonction permettant de filtrer
 
 
 const sectionTitles = [
@@ -26,6 +27,9 @@ class Main extends Component {
             finale: [], //données compilées
             keys: [], //les variables (PPPP et autres)
             loading: false, //Controleur du chargement de la page
+            supp: null, //Données suppléméntaires de locations,
+            filter: "All",
+            current: {}
         }
     }
 
@@ -36,8 +40,8 @@ class Main extends Component {
         reader.onload = async (e) => {
             const text = (e.target.result)
             var data = convert(text)
-            if (data) {
-                this.setState({ data: data, filed: true })
+            if (data.data) {
+                this.setState({ data: data.data, filed: true, supp: data.supp })
             } else {
                 this.setState({ filed: false })
             }
@@ -49,7 +53,7 @@ class Main extends Component {
 
     //Fonction de compilation des données
     async range() {
-        await new Promise(r => setTimeout(r, 3000));
+        await new Promise(r => setTimeout(r, 2000));
         var days = []
         var final = []
         this.state.data.forEach(element => {
@@ -73,7 +77,7 @@ class Main extends Component {
                 final.push(tmp);
             });
 
-            this.setState({ finale: final, keys: Object.keys(final[0].values[0].values), loading: false }, () => { })
+            this.setState({ finale: final, keys: Object.keys(final[0].values[0].values), loading: false })
         })
     }
 
@@ -83,7 +87,9 @@ class Main extends Component {
         return (
             <div>
                 <Typography variant="h3" component="h2">Convertisseur Kml to JS</Typography>
-                <Input type="file" onChange={(e) => this.showFile(e)} inputProps={{ accept: '.xml,.kml' }} style={{ marginTop: 20 }} />
+                <div>
+                    <Input type="file" onChange={(e) => this.showFile(e)} inputProps={{ accept: '.xml,.kml', style: { height: 30 } }} style={{ marginTop: 20, }} />
+                </div>
                 <br />
                 <Button
                     title='Valider'
@@ -96,7 +102,7 @@ class Main extends Component {
                     }}
                     color="primary"
                     variant="contained"
-                    style={{ marginTop: 10 }}
+                    style={{ marginTop: 10, marginBottom: 10 }}
                 >Valider</Button>
 
                 <div>
@@ -108,31 +114,60 @@ class Main extends Component {
                 <div>
                     {
                         this.state.finale.length > 0 && this.state.filed &&
-                        <div style={{ display: "flex", flexDirection: "row" }} >
-
-                            <div style={styles.selector} >
-                                <InputLabel id="label">Location</InputLabel>
-                                <Select labelId="label" id="select" value="EBBR">
-                                    <MenuItem value="EBBR">EBBR</MenuItem>
-                                </Select>
+                        <div>
+                            <div style={{ margin: 20 }} >
+                                <div style={{ display: "flex", flexDirection: "row" }} >
+                                    <Typography style={{ fontWeight: 'bold', marginRight: 5 }} >Origin : </Typography>
+                                    <Typography>EBBR</Typography>
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "row" }} >
+                                    <Typography style={{ fontWeight: 'bold', marginRight: 5, }} >Issuer : </Typography>
+                                    <Typography>{this.state.supp.issuer}</Typography>
+                                    <Typography style={{ fontWeight: 'bold', marginRight: 5, marginLeft: 20 }} >ProductID : </Typography>
+                                    <Typography>{this.state.supp.productID}</Typography>
+                                    <Typography style={{ fontWeight: 'bold', marginRight: 5, marginLeft: 20 }} >IssueTime : </Typography>
+                                    <Typography>{this.state.supp.issueTime}</Typography>
+                                    {/* <Typography style={{ fontWeight: 'bold', marginRight: 5, marginLeft: 20 }} >Origin : </Typography>
+                                    <Typography>EBBR</Typography> */}
+                                </div>
                             </div>
 
-                            <div style={styles.selector} >
-                                <InputLabel id="label">Parameter group</InputLabel>
-                                <Select labelId="label" id="select" value="All">
-                                    {
-                                        sectionTitles.map((el, index) => (
-                                            <MenuItem key={index} value={el}>{el}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
+                            <div style={{ display: "flex", flexDirection: "row" }} >
+
+                                <div style={styles.selector} >
+                                    <InputLabel id="label">Location</InputLabel>
+                                    <Select labelId="label" id="select" value="EBBR">
+                                        <MenuItem value="EBBR">EBBR</MenuItem>
+                                    </Select>
+                                </div>
+
+                                <div style={styles.selector} >
+                                    <InputLabel id="label">Parameter group</InputLabel>
+                                    <Select labelId="label" id="select" value={this.state.filter} onChange={(val) => { this.setState({ filter: val.target.value }) }} >
+                                        {
+                                            sectionTitles.map((el, index) => (
+                                                <MenuItem key={index} value={el}>{el}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                </div>
                             </div>
-                        </div>
+                        </div >
                     }
                     {
-                        <div >
+                        this.state.finale.length > 0 && this.state.filed && <div
+                        >
 
-                            <table>
+                            <table
+                                style={{
+                                    display: "block",
+                                    maxHeight: 600,
+                                    overflowY: "scroll",
+                                    overflowX: "scroll",
+                                    maxWidth: "96%",
+                                    marginLeft: "2%"
+                                }}
+                            >
                                 <thead  >
                                     <tr>
                                         {
@@ -152,15 +187,17 @@ class Main extends Component {
                                 </thead>
                                 <tbody>
                                     {
-                                        this.state.keys.map((elem, ind) => (
+                                        filter(this.state.filter, this.state.keys).map((elem, ind) => (
                                             <tr key={ind} >
-                                                <td style={{ fontWeight: 'bold', color: "#fff", backgroundColor: "#1a8cff", left: 0, position: "sticky" }} >
-                                                    {findVariableName(elem) === false ? elem : (findVariableName(elem) + "\n(" + findVariableUnit(elem) + ")")}
+                                                <td style={{ left: 0, position: "sticky", backgroundColor: "#1a8cff" }} >
+                                                    <div style={{ fontWeight: 'bold', color: "#fff", width: 300 }} >
+                                                        {findVariableName(elem) === false ? elem : (findVariableName(elem) + "\n(" + findVariableUnit(elem) + ")")}
+                                                    </div>
                                                 </td>
                                                 {
                                                     this.state.finale.map((_el) => (
                                                         _el.values.map((el, i) => (
-                                                            <td key={i} >{el.values[elem] === "-" ? "N/A" : el.values[elem]}</td>
+                                                            <td onClick={() => { this.setState({ current: { id: i, variable: elem } }) }} style={{ cursor: "pointer", backgroundColor: (i === this.state.current.id || elem === this.state.current.variable) && "#70b7ff" }} key={i} >{el.values[elem] === "-" ? "N/A" : findGroup(elem, el.values[elem])}</td>
                                                         ))
                                                     ))
                                                 }
@@ -169,10 +206,11 @@ class Main extends Component {
                                     }
                                 </tbody>
                             </table>
+                            <Typography style={{ textAlign: 'left', marginLeft: '2%' }} >{"Showing 1 to " + this.state.keys.length + " of " + this.state.keys.length + " pages"}</Typography>
                         </div>
                     }
-                </div>
-            </div>
+                </div >
+            </div >
         )
     }
 }

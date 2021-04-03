@@ -3,10 +3,10 @@ function findVariableName(input) {
     var name = ""
 
     name = values.find((el) => {
-        return el.id === input
+        return el.code === input
     });
     try {
-        return name.name;
+        return name.desc;
     } catch (error) {
         return false;
     }
@@ -15,563 +15,124 @@ function findVariableUnit(input) {
     var name = ""
 
     name = values.find((el) => {
-        return el.id === input
+        return el.code === input
     });
     try {
-        return name.unit;
+        return name.units;
     } catch (error) {
         return false;
     }
 }
 
-
-
 const values = [
-    {
-        id: "PPPP",
-        name: "Surface pressure, reduced",
-        unit: "Pa"
-    },
-    {
-        id: "E_PPP",
-        name: "Absolute error surface pressure",
-        unit: "Pa"
-    },
-    {
-        id: "TX",
-        name: "Max. temperature - within the last 12 hours",
-        unit: "Kelvin"
-    },
-    {
-        id: "TTT",
-        name: "Temperature 2m above surface",
-        unit: "Kelvin"
-    },
-    {
-        id: "E_TTT",
-        name: "Absolute error temperature 2m above surface",
-        unit: "Kelvin"
-    },
-    {
-        id: "Td",
-        name: "Dewpoint 2m above surface",
-        unit: "Kelvin"
-    },
-    {
-        id: "E_Td",
-        name: "Absolute error dew point 2m above surface",
-        unit: "Kelvin"
-    },
-    {
-        id: "TN",
-        name: "Min. temperature - within the last 12 hours",
-        unit: "Kelvin"
-    },
-    {
-        id: "TG",
-        name: "Min. surface temperature at 5cm within the last 12 hours",
-        unit: "Kelvin"
-    },
-    {
-        id: "TM",
-        name: "Mean temperature during the last 24 hours",
-        unit: "Kelvin"
-    },
-    {
-        id: "T5cm",
-        name: "Temperature 5cm above surface",
-        unit: "Kelvin"
-    },
-    {
-        id: "DD",
-        name: "Wind direction",
-        unit: "0 bis 360 Grad"
-    },
-    {
-        id: "E_DD",
-        name: "Absolute error wind direction",
-        unit: "00 bis 360"
-    },
-    {
-        id: "FF",
-        name: "Wind speed",
-        unit: "m/s"
-    },
-    {
-        id: "E_FF",
-        name: "Absolute error wind speed 10m above surface",
-        unit: "m/s"
-    },
-    {
-        id: "FX1",
-        name: "Max. wind gust within the last hour",
-        unit: "m/s"
-    },
-    {
-        id: "FX3",
-        name: "Max. wind gust within the last 3 hours",
-        unit: "m/s"
-    },
-    {
-        id: "FX625",
-        name: "Prob. : Occur. of gusts >= 25kn within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "FX640",
-        name: "Prob. : Occur. of gusts >= 40kn within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "FX655",
-        name: "Prob. : Occur. of gusts >= 55kn within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "FXh",
-        name: "Max. wind gust within the last 12 hours",
-        unit: "m/s"
-    },
-    {
-        id: "FXh25",
-        name: "Prob. of wind gusts >= 25kn within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "FXh40",
-        name: "Prob. of wind gusts >= 40kn within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "FXh55",
-        name: "Prob. of wind gusts >= 55kn within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "N",
-        name: "Total cloud cover",
-        unit: "% (0..100)"
-    },
-    {
-        id: "Neff",
-        name: "Effective cloud cover",
-        unit: "% (0..100)"
-    },
-    {
-        id: "Nh",
-        name: "High cloud cover (>7 km)",
-        unit: "% (0..100)"
-    },
-    {
-        id: "Nm",
-        name: "Midlevel cloud cover (2-7 km)",
-        unit: "% (0..100)"
-    },
-    {
-        id: "Nl",
-        name: "Low cloud cover (lower than 2 km)",
-        unit: "% (0..100)"
-    },
-    {
-        id: "N05",
-        name: "Cloud cover below 500 ft.",
-        unit: "% (0..100)"
-    },
-    {
-        id: "VV",
-        name: "Visibility",
-        unit: "m"
-    },
-    {
-        id: "VV10",
-        name: "Prob. : Visibility below 1000m",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwM",
-        name: "Prob. for fog within the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwM6",
-        name: "Prob. for fog within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwMh",
-        name: "Prob. for fog within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwMd",
-        name: "Prob. : Occur. of fog within the last 24 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "ww",
-        name: "Significant Weather",
-        unit: "-"
-    },
-    {
-        id: "ww3",
-        name: "Significant Weather of the last 3 hours",
-        unit: "- (0..95)"
-    },
-    {
-        id: "W1W2",
-        name: "Past weather during the last 6 hours",
-        unit: "-"
-    },
-    {
-        id: "wwP",
-        name: "Prob. : Occur. of precip. within the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwP6",
-        name: "Prob. : Occur. of precip. within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwPh",
-        name: "Prob. : Occur. of precip. within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwPd",
-        name: "Prob. : Occur. of any precip. within the last 24 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwZ",
-        name: "Prob. : Occur. of drizzle within the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwZ6",
-        name: "Prob. : Occur. of drizzle within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwZh",
-        name: "Prob. : Occur. of drizzle within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwD",
-        name: "Prob. : Occur. of stratiform precip. within the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwD6",
-        name: "Prob. : Occur. of stratiform precip. within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwDh",
-        name: "Prob. : Occur. of stratiform precip. within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwC",
-        name: "Prob. : Occur. of convective precip. within the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwC6",
-        name: "Prob. : Occur. of convective precip. within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwCh",
-        name: "Prob. : Occur. of convective precip. within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwT",
-        name: "Prob. : Occur. of thunderstorms within the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwT6",
-        name: "Prob. : Occur. of thunderstorms within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwTh",
-        name: "Prob. : Occur. of thunderstorms within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwTd",
-        name: "Prob. : Occur. of thunderstorms within the last 24 hours ",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwS",
-        name: "Prob. : Occur. of solid precip. within the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwS6",
-        name: "Prob. : Occur. of solid precip. within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwSh",
-        name: "Prob. : Occur. of solid precip. within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwL",
-        name: "Prob. : Occur. of liquid precip. within the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwL6",
-        name: "Prob. : Occur. of liquid precip. within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwLh",
-        name: "Prob. : Occur. of liquid precip. within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwF",
-        name: "Prob. : Occur. of freezing rain within the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwF6",
-        name: "Prob. : Occur. of freezing rain within the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "wwFh",
-        name: "Prob. : Occur. of freezing rain within the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "DRR1",
-        name: "Duration of precip. within the last hour",
-        unit: "s"
-    },
-    {
-        id: "RR6c",
-        name: "Total precip. during the last 6 hours consistent with significant weather",
-        unit: "kg / m2"
-    },
-    {
-        id: "RRhc",
-        name: "Total precip. during the last 12 hours consistent with significant weather",
-        unit: "kg / m2"
-    },
-    {
-        id: "RRdc",
-        name: "Total precip. during the last 24 hours consistent with significant weather",
-        unit: "kg / m2"
-    },
-    {
-        id: "RR1c",
-        name: "Total precip. during the last hour consistent with significant weather",
-        unit: "kg / m2"
-    },
-    {
-        id: "RRS1c",
-        name: "Snow-Rain-Equivalent during the last hour",
-        unit: "kg / m2"
-    },
-    {
-        id: "RRL1c",
-        name: "Total liquid precip. during the last hour consistent with significant weather",
-        unit: "kg / m2"
-    },
-    {
-        id: "RR3c",
-        name: "Total precip. during the last 3 hours consistent with significant weather",
-        unit: "kg / m2"
-    },
-    {
-        id: "RRS3c",
-        name: "Snow-Rain-Equivalent during the last 3 hours",
-        unit: "kg/m2"
-    },
-    {
-        id: "R101",
-        name: "Prob. of precip. > 0.1 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R102",
-        name: "Prob. of precip. > 0.2 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R103",
-        name: "Prob. of precip. > 0.3 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R105",
-        name: "Prob. of precip. > 0.5 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R107",
-        name: "Prob. of precip. > 0.7 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R110",
-        name: "Prob. of precip. > 1.0 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R120",
-        name: "Prob. of precip. > 2.0 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R130",
-        name: "Prob. of precip. > 3.0 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R150",
-        name: "Prob. of precip. > 5.0 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "RR1o1",
-        name: "Prob. of precip. > 10 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "RR1w1",
-        name: "Prob. of precip. > 15 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "RR1u1",
-        name: "Prob. of precip. > 25 mm during the last hour",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R600",
-        name: "Prob. of precip. > 0.0mm during the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R602",
-        name: "Prob. of precip. > 0.2mm during the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R610",
-        name: "Prob. of precip. > 1.0 mm during the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "R650",
-        name: "Prob. of precip. > 5.0mm during the last 6 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "Rh00",
-        name: "Prob. of precip. > 0.0mm during the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "Rh02",
-        name: "Prob. of precip. > 0.2mm during the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "Rh10",
-        name: "Prob. of precip. > 1.0mm during the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "Rh50",
-        name: "Prob. of precip. > 5.0mm during the last 12 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "SunD",
-        name: "Yesterdays total sunshine duration",
-        unit: "s"
-    },
-    {
-        id: "RSunD",
-        name: "Relative sunshine duration within the last 24 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "PSd00",
-        name: "Prob. : relative sunshine duration > 0 % within 24 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "PSd30",
-        name: "Prob. : relative sunshine duration > 30 % within 24 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "PSd60",
-        name: "Prob. : relative sunshine duration > 60 % within 24 hours",
-        unit: "% (0..100)"
-    },
-    {
-        id: "RRad1",
-        name: "Global irradiance within the last hour",
-        unit: "% (0..80)"
-    },
-    {
-        id: "Rad1h",
-        name: "Global Irradiance",
-        unit: "kJ/m2"
-    },
-    {
-        id: "SunD1",
-        name: "Sunshine duration during the last Hour",
-        unit: "s"
-    },
-    {
-        id: "SunD3",
-        name: "Sunshine duration during the last three hours",
-        unit: "s/s"
-    },
-    {
-        id: "PEvap",
-        name: "Potential evapotranspiration within the last 24 hours",
-        unit: "kg / m2"
-    },
-    {
-        id: "WPc11",
-        name: "Optional significant weather (highest priority) during the last hour",
-        unit: "- (0..95)"
-    },
-    {
-        id: "WPc31",
-        name: "Optional significant weather (highest priority) during the last 3 hours",
-        unit: "- (0..95)"
-    },
-    {
-        id: "WPc61",
-        name: "Optional significant weather (highest priority) during the last 6 hours",
-        unit: "- (0..95)"
-    },
-    {
-        id: "WPch1",
-        name: "Optional significant weather (highest priority) during the last 12 hours",
-        unit: "- (0..95)"
-    },
-    {
-        id: "WPcd1",
-        name: "Optional significant weather (highest priority) during the last 24 hours",
-        unit: "- (0..95)"
-    },
+    { code: "PPPP", desc: "Surface pressure, reduced", units: "hPa", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "E_PPP", desc: "Absolute error surface pressure", units: "hPa", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "TX", desc: "Max. temperature - within the last 12 hours", units: "°C", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "TTT", desc: "Temperature 2m above surface", units: "°C", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "E_TTT", desc: "Absolute error temperature 2m above surface", units: "°C", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "Td", desc: "Dewpoint 2m above surface", units: "°C", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "E_Td", desc: "Absolute error dew point 2m above surface", units: "°C", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "TN", desc: "Min. temperature - within the last 12 hours", units: "°C", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "TG", desc: "Min. surface temperature at 5cm within the last 12 hours", units: "°C", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "TM", desc: "Mean temperature during the last 24 hours", units: "°C", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "T5cm", desc: "Temperature 5cm above surface", units: "°C", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "DD", desc: "Wind direction", units: "0 bis 360 Grad", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "E_DD", desc: "Absolute error wind direction", units: "00 bis 360", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "FF", desc: "Wind speed", units: "kt", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "E_FF", desc: "Absolute error wind speed 10m above surface", units: "kt", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "FX1", desc: "Max. wind gust within the last hour", units: "kt", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "FX3", desc: "Max. wind gust within the last 3 hours", units: "kt", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "FX625", desc: "Prob. : Occur. of gusts >= 25kn within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "FX640", desc: "Prob. : Occur. of gusts >= 40kn within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "FX655", desc: "Prob. : Occur. of gusts >= 55kn within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "FXh", desc: "Max. wind gust within the last 12 hours", units: "kt", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "FXh25", desc: "Prob. of wind gusts >= 25kn within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "FXh40", desc: "Prob. of wind gusts >= 40kn within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "FXh55", desc: "Prob. of wind gusts >= 55kn within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "N", desc: "Total cloud cover", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "Neff", desc: "Effective cloud cover", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "Nh", desc: "High cloud cover (>7 km)", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "Nm", desc: "Midlevel cloud cover (2-7 km)", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "Nl", desc: "Low cloud cover (lower than 2 km)", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "N05", desc: "Cloud cover below 500 ft.", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "VV", desc: "Visibility", units: "hm", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "VV10", desc: "Prob. : Visibility below 1000m", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwM", desc: "Prob. for fog within the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwM6", desc: "Prob. for fog within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwMh", desc: "Prob. for fog within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwMd", desc: "Prob. : Occur. of fog within the last 24 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "ww", desc: "Significant Weather", units: "-", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "ww3", desc: "Significant Weather of the last 3 hours", units: "- (0..95)", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "W1W2", desc: "Past weather during the last 6 hours", units: "-", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwP", desc: "Prob. : Occur. of precip. within the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwP6", desc: "Prob. : Occur. of precip. within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwPh", desc: "Prob. : Occur. of precip. within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwPd", desc: "Prob. : Occur. of any precip. within the last 24 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwZ", desc: "Prob. : Occur. of drizzle within the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwZ6", desc: "Prob. : Occur. of drizzle within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwZh", desc: "Prob. : Occur. of drizzle within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwD", desc: "Prob. : Occur. of stratiform precip. within the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwD6", desc: "Prob. : Occur. of stratiform precip. within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwDh", desc: "Prob. : Occur. of stratiform precip. within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwC", desc: "Prob. : Occur. of convective precip. within the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwC6", desc: "Prob. : Occur. of convective precip. within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwCh", desc: "Prob. : Occur. of convective precip. within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwT", desc: "Prob. : Occur. of thunderstorms within the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwT6", desc: "Prob. : Occur. of thunderstorms within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwTh", desc: "Prob. : Occur. of thunderstorms within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwTd", desc: "Prob. : Occur. of thunderstorms within the last 24 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwS", desc: "Prob. : Occur. of solid precip. within the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwS6", desc: "Prob. : Occur. of solid precip. within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwSh", desc: "Prob. : Occur. of solid precip. within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwL", desc: "Prob. : Occur. of liquid precip. within the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwL6", desc: "Prob. : Occur. of liquid precip. within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwLh", desc: "Prob. : Occur. of liquid precip. within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwF", desc: "Prob. : Occur. of freezing rain within the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwF6", desc: "Prob. : Occur. of freezing rain within the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "wwFh", desc: "Prob. : Occur. of freezing rain within the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "DRR1", desc: "Duration of precip. within the last hour", units: "s", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RR6c", desc: "Total precip. during the last 6 hours consistent with significant weather", units: "kg / m2", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RRhc", desc: "Total precip. during the last 12 hours consistent with significant weather", units: "kg / m2", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RRdc", desc: "Total precip. during the last 24 hours consistent with significant weather", units: "kg / m2", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RR1c", desc: "Total precip. during the last hour consistent with significant weather", units: "kg/m2", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RRS1c", desc: "Snow-Rain-Equivalent during the last hour", units: "kg/m2", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RRL1c", desc: "Total liquid precip. during the last hour consistent with significant weather", units: "kg / m2", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RR3c", desc: "Total precip. during the last 3 hours consistent with significant weather", units: "kg/m2", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RRS3c", desc: "Snow-Rain-Equivalent during the last 3 hours", units: "kg/m2", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R101", desc: "Prob. of precip. > 0.1 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R102", desc: "Prob. of precip. > 0.2 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R103", desc: "Prob. of precip. > 0.3 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R105", desc: "Prob. of precip. > 0.5 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R107", desc: "Prob. of precip. > 0.7 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R110", desc: "Prob. of precip. > 1.0 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R120", desc: "Prob. of precip. > 2.0 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R130", desc: "Prob. of precip. > 3.0 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R150", desc: "Prob. of precip. > 5.0 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RR1o1", desc: "Prob. of precip. > 10 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RR1w1", desc: "Prob. of precip. > 15 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RR1u1", desc: "Prob. of precip. > 25 mm during the last hour", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R600", desc: "Prob. of precip. > 0.0mm during the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R602", desc: "Prob. of precip. > 0.2mm during the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R610", desc: "Prob. of precip. > 1.0 mm during the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "R650", desc: "Prob. of precip. > 5.0mm during the last 6 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "Rh00", desc: "Prob. of precip. > 0.0mm during the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "Rh02", desc: "Prob. of precip. > 0.2mm during the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "Rh10", desc: "Prob. of precip. > 1.0mm during the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "Rh50", desc: "Prob. of precip. > 5.0mm during the last 12 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "SunD", desc: "Yesterdays total sunshine duration", units: "s", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RSunD", desc: "Relative sunshine duration within the last 24 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "PSd00", desc: "Prob. : relative sunshine duration > 0 % within 24 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "PSd30", desc: "Prob. : relative sunshine duration > 30 % within 24 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "PSd60", desc: "Prob. : relative sunshine duration > 60 % within 24 hours", units: "% (0..100)", filter: { above: true, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "RRad1", desc: "Global irradiance within the last hour", units: "% (0..80)", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "Rad1h", desc: "Global Irradiance", units: "kJ/m2", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "SunD1", desc: "Sunshine duration during the last Hour", units: "s", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "SunD3", desc: "Sunshine duration during the last three hours", units: "s/s", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "PEvap", desc: "Potential evapotranspiration within the last 24 hours", units: "kg / m2", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "WPc11", desc: "Optional significant weather (highest priority) during the last hour", units: "- (0..95)", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "WPc31", desc: "Optional significant weather (highest priority) during the last 3 hours", units: "- (0..95)", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "WPc61", desc: "Optional significant weather (highest priority) during the last 6 hours", units: "- (0..95)", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "WPch1", desc: "Optional significant weather (highest priority) during the last 12 hours", units: "- (0..95)", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
+    { code: "WPcd1", desc: "Optional significant weather (highest priority) during the last 24 hours", units: "- (0..95)", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
 ]
-
-export { findVariableName, values as variables , findVariableUnit}
+export { findVariableName, values as variables, findVariableUnit }
