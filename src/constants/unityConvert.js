@@ -97,18 +97,22 @@ function findGroup(variable, value) {
 }
 
 function convert_1(val) {
-    return (val / 100)
+    var result = (val / 100)
+    return (Math.trunc(result * 10) / 10).toFixed(1)
 }
 
 function convert_2(val) {
-    return (val - 273.15)
+    var result = (val - 273.15)
+    return (Math.trunc(result * 10) / 10).toFixed(1)
 }
 
 function convert_3(val) {
-    return (val * 1.94384)
+    var result = (val * 1.94384)
+    return (Math.trunc(result * 10) / 10).toFixed(1)
 }
 function convert_4(val) {
-    return (val / 100)
+    var result = (val / 100)
+    return (Math.trunc(result * 10) / 10).toFixed(1)
 }
 
 export { findGroup }

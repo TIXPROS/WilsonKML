@@ -165,13 +165,15 @@ class Main extends Component {
                                     overflowY: "scroll",
                                     overflowX: "scroll",
                                     maxWidth: "96%",
-                                    marginLeft: "2%"
+                                    marginLeft: "2%",
+                                    position: 'relative'
                                 }}
                             >
                                 <thead  >
                                     <tr>
                                         {
-                                            this.state.finale.length > 0 && this.state.filed && <th style={{ top: 0 }} ></th>
+                                            this.state.finale.length > 0 && this.state.filed &&
+                                            <th style={{ top: 0 }} ></th>
                                         }
                                         {
                                             this.state.finale.map((_el) => (
