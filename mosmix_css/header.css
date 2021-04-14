@@ -1,0 +1,33 @@
+body {
+	background-color: #f9f9f9;
+	font-family: Verdana;
+	font-size: 0.8rem;
+}
+
+#banner {
+	background-image: url("../img/met_banner.png"), linear-gradient(to right, #1db9de, #00718b);
+	background-position: top right;
+	background-repeat: no-repeat;
+	height: 70px;
+	max-width: 100%; 
+}
+
+#logo {
+	padding: center; 
+	// ou 5px
+}
+
+#versionId {
+	float: right;
+	font-size: 0.6rem;
+    font-style: italic;
+	margin-top: 10px;
+}
+
+#toptitle {
+	font-size: 15px;
+	font-weight: bold;
+	float: left;
+	margin-top: 20px;
+	
+}
