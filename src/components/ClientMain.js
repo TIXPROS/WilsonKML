@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Input, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
+import { Backdrop, Button, CircularProgress, Input, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 import { findVariableName, findVariableUnit } from '../constants/variableName' //Importation des fonctions permettant de retrouver les noms et les unités des variables 
 import { findGroup } from "../constants/unityConvert"
@@ -16,6 +16,14 @@ const sectionTitles = [
     "Temperature",
     "Visibility",
 ];
+const Location = [
+    { id: "06451", Name: "EBBR", FicKML: "MOSMIX_LATEST_06451.kml" },
+    { id: "06450", Name: "EBAW", FicKML: "MOSMIX_LATEST_06450.kml" },
+    { id: "06449", Name: "EBCI", FicKML: "MOSMIX_LATEST_06449.kml" },
+    { id: "06478", Name: "EBLG", FicKML: "MOSMIX_LATEST_06478.kml" },
+    { id: "06407", Name: "EBOS", FicKML: "MOSMIX_LATEST_06407.kml" }
+
+]
 class Main extends Component {
 
     constructor(props) {
@@ -29,17 +37,20 @@ class Main extends Component {
             loading: false, //Controleur du chargement de la page
             supp: null, //Données suppléméntaires de locations,
             filter: "All",
-            current: {}
+            current: {},
+            files: null,
+            currentLocation: "EBBR"
         }
     }
 
-    //Fonction de récupération de fichier
-    showFile = async (e) => {
-        e.preventDefault()
+    //Fonction de récupération de fichier en texte
+    async showFile(file) {
+
         const reader = new FileReader()
         reader.onload = async (e) => {
             const text = (e.target.result)
             var data = convert(text)
+            // console.log(data);
             if (data.data) {
                 this.setState({ data: data.data, filed: true, supp: data.supp })
             } else {
@@ -47,7 +58,22 @@ class Main extends Component {
             }
 
         };
-        e.target.files[0] && reader.readAsText(e.target.files[0])
+        reader.readAsText(file)
+    }
+
+    //chargement des fichiers du dossier
+    loadFolder = async (e) => {
+        var folder = e.target.files
+        var filterKML = [...folder].filter((el) => (el.type === "application/vnd.google-earth.kml+xml"))
+
+
+
+        var firstLocationName = Location.find((el) => (el.FicKML === filterKML[0].name))
+
+        this.setState({ files: filterKML, currentLocation: firstLocationName.Name }, () => {
+            this.showFile(filterKML[0])
+        })
+
     }
 
 
@@ -88,7 +114,8 @@ class Main extends Component {
             <div>
                 <Typography variant="h3" component="h2">Convertisseur Kml to JS</Typography>
                 <div>
-                    <Input type="file" onChange={(e) => this.showFile(e)} inputProps={{ accept: '.xml,.kml', style: { height: 30 } }} style={{ marginTop: 20, }} />
+                    {/* <Input type="file" onChange={(e) => this.showFile(e)} inputProps={{ accept: '.xml,.kml', style: { height: 30 } }} style={{ marginTop: 20, }} /> */}
+                    <Input type="file" onChange={(e) => this.loadFolder(e)} inputProps={{ webkitdirectory: "", directory: "", style: { height: 30 } }} style={{ marginTop: 20, }} />
                 </div>
                 <br />
                 <Button
@@ -106,8 +133,14 @@ class Main extends Component {
                 >Valider</Button>
 
                 <div>
-                    {
+                    {/* {
                         this.state.loading && <CircularProgress color="secondary" style={{ marginTop: 15 }} />
+                    } */}
+                    {
+                        this.state.loading &&
+                        <Backdrop /*className={classes.backdrop}*/ open={this.state.loading} style={{ zIndex: 1500 }} >
+                            <CircularProgress color="secondary" />
+                        </Backdrop>
                     }
                 </div>
 
@@ -118,7 +151,7 @@ class Main extends Component {
                             <div style={{ margin: 20 }} >
                                 <div style={{ display: "flex", flexDirection: "row" }} >
                                     <Typography style={{ fontWeight: 'bold', marginRight: 5 }} >Origin : </Typography>
-                                    <Typography>EBBR</Typography>
+                                    <Typography>{this.state.currentLocation}</Typography>
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "row" }} >
                                     <Typography style={{ fontWeight: 'bold', marginRight: 5, }} >Issuer : </Typography>
@@ -136,8 +169,28 @@ class Main extends Component {
 
                                 <div style={styles.selector} >
                                     <InputLabel id="label">Location</InputLabel>
-                                    <Select labelId="label" id="select" value="EBBR">
-                                        <MenuItem value="EBBR">EBBR</MenuItem>
+                                    <Select labelId="label" id="select" value={this.state.currentLocation}
+                                        onChange={(val) => {
+                                            this.setState({ currentLocation: val.target.value }, () => {
+
+                                                var name = Location.find((el) => (el.Name === val.target.value))
+                                                var file = this.state.files.find((el) => (el.name === name.FicKML))
+
+                                                this.showFile(file)
+
+                                                if (this.state.filed) {
+                                                    this.setState({ loading: true }, () => { this.range() })
+                                                } else {
+                                                    alert('Veuillez choisir un fichier à convertir')
+                                                }
+                                            })
+                                        }}
+                                    >
+                                        {
+                                            Location.map((el, index) => (
+                                                <MenuItem key={index} value={el.Name}>{el.Name}</MenuItem>
+                                            ))
+                                        }
                                     </Select>
                                 </div>
 
@@ -157,6 +210,7 @@ class Main extends Component {
                     {
                         this.state.finale.length > 0 && this.state.filed && <div
                         >
+                            <div style={{ backgroundColor: '#1a8cff', width: 330, height: 55, position: "absolute", zIndex: 1111, left: "2%" }} ></div>
 
                             <table
                                 style={{
@@ -208,7 +262,7 @@ class Main extends Component {
                                     }
                                 </tbody>
                             </table>
-                            <Typography style={{ textAlign: 'left', marginLeft: '2%' }} >{"Showing 1 to " + this.state.keys.length + " of " + this.state.keys.length + " pages"}</Typography>
+                            <Typography style={{ textAlign: 'left', marginLeft: '2%' }} >{"Showing 1 to " + filter(this.state.filter, this.state.keys).length + " of " + this.state.keys.length + " pages"}</Typography>
                         </div>
                     }
                 </div >
