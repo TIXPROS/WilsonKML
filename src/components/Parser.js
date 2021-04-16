@@ -65,7 +65,7 @@ const convert = (value) => {
         }
     } catch (error) {
         console.log(error);
-        alert('Le fichier choisi est incompatible')
+        alert('Le fichier choisi est incompatible ou inexistant')
         return false;
     }
 }

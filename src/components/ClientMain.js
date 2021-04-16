@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { Backdrop, Button, CircularProgress, Input, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
-import { findVariableName, findVariableUnit } from '../constants/variableName' //Importation des fonctions permettant de retrouver les noms et les unités des variables 
+import { findVariableName, findVariableUnit, aboveColor, aboveWeight } from '../constants/variableName' //Importation des fonctions permettant de retrouver les noms et les unités des variables 
 import { findGroup } from "../constants/unityConvert"
 
 import { convert } from "./Parser";//Importation de l'extracteur redéfnie
@@ -17,11 +18,11 @@ const sectionTitles = [
     "Visibility",
 ];
 const Location = [
-    { id: "06451", Name: "EBBR", FicKML: "MOSMIX_LATEST_06451.kml" },
-    { id: "06450", Name: "EBAW", FicKML: "MOSMIX_LATEST_06450.kml" },
-    { id: "06449", Name: "EBCI", FicKML: "MOSMIX_LATEST_06449.kml" },
-    { id: "06478", Name: "EBLG", FicKML: "MOSMIX_LATEST_06478.kml" },
-    { id: "06407", Name: "EBOS", FicKML: "MOSMIX_LATEST_06407.kml" }
+    { id: "06451", Name: "EBBR", FicKML: "MOSMIX_LATEST_06451.kml", color: "#1a8cff" },
+    { id: "06450", Name: "EBAW", FicKML: "MOSMIX_LATEST_06450.kml", color: "#D473D4" },
+    { id: "06449", Name: "EBCI", FicKML: "MOSMIX_LATEST_06449.kml", color: "#08CC0A" },
+    { id: "06478", Name: "EBLG", FicKML: "MOSMIX_LATEST_06478.kml", color: "#00BFFF" },
+    { id: "06407", Name: "EBOS", FicKML: "MOSMIX_LATEST_06407.kml", color: "#785e2f" }
 
 ]
 class Main extends Component {
@@ -34,47 +35,66 @@ class Main extends Component {
             days: [], //les jours
             finale: [], //données compilées
             keys: [], //les variables (PPPP et autres)
-            loading: false, //Controleur du chargement de la page
+            loading: true, //Controleur du chargement de la page
             supp: null, //Données suppléméntaires de locations,
             filter: "All",
             current: {},
             files: null,
-            currentLocation: "EBBR"
+            currentLocation: "EBBR",
+            currentColor: "#000"
         }
     }
 
+    componentDidMount() {
+        // fetch(process.env.PUBLIC_URL + "/mosmix_data/MOSMIX_LATEST_06407.kml")
+        //     .then(async response => console.log(await response.text()))
+        //     .catch((err) => {
+        //         alert('Fichier inexistant ou incorrect')
+        //         console.log(err);
+        //     })
+        this.showFile("EBBR")
+    }
+
+
     //Fonction de récupération de fichier en texte
-    async showFile(file) {
+    async showFile(name) {
 
-        const reader = new FileReader()
-        reader.onload = async (e) => {
-            const text = (e.target.result)
-            var data = convert(text)
-            // console.log(data);
-            if (data.data) {
-                this.setState({ data: data.data, filed: true, supp: data.supp })
-            } else {
-                this.setState({ filed: false })
-            }
+        var firstLocationName = Location.find((el) => (el.Name === name))
 
-        };
-        reader.readAsText(file)
+        // console.log(firstLocationName);
+
+        fetch(process.env.PUBLIC_URL + "/mosmix_data/" + firstLocationName.FicKML)
+            .then(async response => {
+                var text = await response.text()
+                // console.log(text);
+                var data = convert(text)
+                if (data.data) {
+                    this.setState({ data: data.data, filed: true, supp: data.supp })
+                } else {
+                    this.setState({ filed: false })
+                }
+                this.range()
+            })
+            .catch((err) => {
+                alert('Fichier inexistant ou incorrect')
+                console.log(err);
+            })
     }
 
     //chargement des fichiers du dossier
-    loadFolder = async (e) => {
-        var folder = e.target.files
-        var filterKML = [...folder].filter((el) => (el.type === "application/vnd.google-earth.kml+xml"))
+    // loadFolder = async (e) => {
 
 
 
-        var firstLocationName = Location.find((el) => (el.FicKML === filterKML[0].name))
+    //     var folder = e.target.files
+    //     var filterKML = [...folder].filter((el) => (el.type === "application/vnd.google-earth.kml+xml"))
+    //     var firstLocationName = Location.find((el) => (el.FicKML === filterKML[0].name))
 
-        this.setState({ files: filterKML, currentLocation: firstLocationName.Name }, () => {
-            this.showFile(filterKML[0])
-        })
+    //     this.setState({ files: filterKML, currentLocation: firstLocationName.Name }, () => {
+    //         this.showFile(filterKML[0])
+    //     })
 
-    }
+    // }
 
 
     //Fonction de compilation des données
@@ -107,14 +127,19 @@ class Main extends Component {
         })
     }
 
+    findColor() {
+        var data = Location.find((el) => (el.Name === this.state.currentLocation))
+        return data.color
+    }
+
     //Rendu visuel
     render() {
+        const color = this.findColor()
 
         return (
             <div>
                 <Typography variant="h3" component="h2">Convertisseur Kml to JS</Typography>
-                <div>
-                    {/* <Input type="file" onChange={(e) => this.showFile(e)} inputProps={{ accept: '.xml,.kml', style: { height: 30 } }} style={{ marginTop: 20, }} /> */}
+                {/* <div>
                     <Input type="file" onChange={(e) => this.loadFolder(e)} inputProps={{ webkitdirectory: "", directory: "", style: { height: 30 } }} style={{ marginTop: 20, }} />
                 </div>
                 <br />
@@ -130,7 +155,7 @@ class Main extends Component {
                     color="primary"
                     variant="contained"
                     style={{ marginTop: 10, marginBottom: 10 }}
-                >Valider</Button>
+                >Valider</Button> */}
 
                 <div>
                     {/* {
@@ -174,9 +199,9 @@ class Main extends Component {
                                             this.setState({ currentLocation: val.target.value }, () => {
 
                                                 var name = Location.find((el) => (el.Name === val.target.value))
-                                                var file = this.state.files.find((el) => (el.name === name.FicKML))
+                                                // var file = this.state.files.find((el) => (el.name === name.FicKML))
 
-                                                this.showFile(file)
+                                                this.showFile(name.Name)
 
                                                 if (this.state.filed) {
                                                     this.setState({ loading: true }, () => { this.range() })
@@ -210,7 +235,7 @@ class Main extends Component {
                     {
                         this.state.finale.length > 0 && this.state.filed && <div
                         >
-                            <div style={{ backgroundColor: '#1a8cff', width: 330, height: 55, position: "absolute", zIndex: 1111, left: "2%" }} ></div>
+                            <div style={{ backgroundColor: color, width: 330, height: 55, position: "absolute", zIndex: 1111, left: "2%" }} ></div>
 
                             <table
                                 style={{
@@ -227,12 +252,12 @@ class Main extends Component {
                                     <tr>
                                         {
                                             this.state.finale.length > 0 && this.state.filed &&
-                                            <th style={{ top: 0 }} ></th>
+                                            <th style={{ top: 0, backgroundColor: color }} ></th>
                                         }
                                         {
                                             this.state.finale.map((_el) => (
                                                 _el.values.map((el, id) => (
-                                                    <th style={{ top: 0 }} key={id} >
+                                                    <th style={{ top: 0, backgroundColor: color }} key={id} >
                                                         {_el.date.slice(8, 10)}<br />
                                                         {el.date.split('T')[1].slice(0, 2) + "Z"}
                                                     </th>
@@ -245,7 +270,7 @@ class Main extends Component {
                                     {
                                         filter(this.state.filter, this.state.keys).map((elem, ind) => (
                                             <tr key={ind} >
-                                                <td style={{ left: 0, position: "sticky", backgroundColor: "#1a8cff" }} >
+                                                <td style={{ left: 0, position: "sticky", backgroundColor: color }} >
                                                     <div style={{ fontWeight: 'bold', color: "#fff", width: 300 }} >
                                                         {findVariableName(elem) === false ? elem : (findVariableName(elem) + "\n(" + findVariableUnit(elem) + ")")}
                                                     </div>
@@ -253,7 +278,11 @@ class Main extends Component {
                                                 {
                                                     this.state.finale.map((_el) => (
                                                         _el.values.map((el, i) => (
-                                                            <td onClick={() => { this.setState({ current: { id: i, variable: elem } }) }} style={{ cursor: "pointer", backgroundColor: (i === this.state.current.id || elem === this.state.current.variable) && "#70b7ff" }} key={i} >{el.values[elem] === "-" ? "N/A" : findGroup(elem, el.values[elem])}</td>
+                                                            <td onClick={() => { this.setState({ current: { id: i, variable: elem } }) }}
+
+                                                                style={{ fontWeight: aboveWeight(elem, el.values[elem] === "-" ? "N/A" : findGroup(elem, el.values[elem])), color: aboveColor(elem, el.values[elem] === "-" ? "N/A" : findGroup(elem, el.values[elem])), cursor: "pointer", backgroundColor: (i === this.state.current.id || elem === this.state.current.variable) && "#70b7ff" }}
+
+                                                                key={i} >{el.values[elem] === "-" ? "N/A" : findGroup(elem, el.values[elem])}</td>
                                                         ))
                                                     ))
                                                 }

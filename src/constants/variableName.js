@@ -24,6 +24,109 @@ function findVariableUnit(input) {
     }
 }
 
+function aboveWeight(variable, value) {
+    if (value === "N/A") {
+        return
+    }
+
+    var name = ""
+
+    name = values.find((el) => {
+        return (el.code === variable && el.filter.above === true)
+    });
+    try {
+        if (name.units) {
+
+            if (isTresholdReached(value, name.filter.treshold, name.filter.above)) {
+                return "bold"
+            }
+            return;
+        }
+    } catch (error) {
+        return;
+    }
+}
+
+function aboveColor(variable, value) {
+
+    if (value === "N/A") {
+        return "#000"
+    }
+
+    var name = ""
+
+    name = values.find((el) => {
+        return (el.code === variable && el.filter.above === true)
+    });
+    try {
+        if (name.units) {
+
+            if (isTresholdReached(value, name.filter.treshold, name.filter.above)) {
+                return getGradientColor(value, name.filter.minGrad, name.filter.maxGrad, true, name.filter.colorGrad)
+            }
+            return "#000";
+        }
+    } catch (error) {
+        return "#000";
+    }
+
+}
+
+function isTresholdReached(value, treshold, above) {
+    if (above) {
+        return (value >= treshold);
+    } else {
+        return (value <= treshold);
+    }
+}
+
+function getGradientColor(value, min, max, lighter, color) {
+
+    var gradFactor = 255 * (1 - (value - min) / (max - min));
+
+    // console.log(value + "---" + min + "---" + max + "---" + lighter + "---" + color);
+    if (lighter) {
+        gradFactor = 255 * (value - min) / (max - min);
+    }
+    var gradMatrix = [0, 0, 0];
+    switch (color) {
+        case 'grey':
+            gradMatrix = [1, 1, 1];
+            break;
+        case 'red':
+            gradMatrix = [1, 0, 0];
+            break;
+        case 'green':
+            gradMatrix = [0, 1, 0];
+            break;
+        case 'blue':
+            gradMatrix = [0, 0, 1];
+            break;
+        case 'yellow':
+            gradMatrix = [1, 1, 0];
+            break;
+        case 'cyan':
+            gradMatrix = [0, 1, 1];
+            break;
+        case 'magenta':
+            gradMatrix = [1, 0, 1];
+            break;
+        default:
+            gradMatrix = [0, 0, 0];
+    }
+    var red = Math.round(gradFactor * gradMatrix[0]);
+    var green = Math.round(gradFactor * gradMatrix[1]);
+    var blue = Math.round(gradFactor * gradMatrix[2]);
+    // console.log("rgb(" + red + "," + green + "," + blue + ")");
+    return "rgb(" + red + "," + green + "," + blue + ")";
+}
+
+
+
+
+
+
+
 const values = [
     { code: "PPPP", desc: "Surface pressure, reduced", units: "hPa", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
     { code: "E_PPP", desc: "Absolute error surface pressure", units: "hPa", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
@@ -135,4 +238,4 @@ const values = [
     { code: "WPch1", desc: "Optional significant weather (highest priority) during the last 12 hours", units: "- (0..95)", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
     { code: "WPcd1", desc: "Optional significant weather (highest priority) during the last 24 hours", units: "- (0..95)", filter: { above: false, treshold: 50, minGrad: 10, maxGrad: 100, colorGrad: 'green' } },
 ]
-export { findVariableName, values as variables, findVariableUnit }
+export { findVariableName, values as variables, findVariableUnit, aboveColor, aboveWeight }

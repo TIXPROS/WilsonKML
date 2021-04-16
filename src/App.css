@@ -62,9 +62,6 @@ tbody tr {
 tbody tr:nth-of-type(even) {
   background-color: #f3f3f3;
 }
-tbody tr:last-of-type {
-  border-bottom: 2px solid #1a8cff;
-}
 button{
     background: #1a8cff;
     color: #fff;
@@ -78,7 +75,7 @@ button{
 }
 th {
   position: sticky;
-  background-color: #1a8cff;
+  /* background-color: #1a8cff; */
   top: 0; /* Don't forget this, required for the stickiness */
   z-index: 1;
 }
