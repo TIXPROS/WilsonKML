@@ -72,6 +72,7 @@ function aboveColor(variable, value) {
 
 }
 
+
 function isTresholdReached(value, treshold, above) {
     if (above) {
         return (value >= treshold);
@@ -80,11 +81,11 @@ function isTresholdReached(value, treshold, above) {
     }
 }
 
+// Récupération des couleurs
 function getGradientColor(value, min, max, lighter, color) {
 
     var gradFactor = 255 * (1 - (value - min) / (max - min));
 
-    // console.log(value + "---" + min + "---" + max + "---" + lighter + "---" + color);
     if (lighter) {
         gradFactor = 255 * (value - min) / (max - min);
     }
@@ -117,7 +118,6 @@ function getGradientColor(value, min, max, lighter, color) {
     var red = Math.round(gradFactor * gradMatrix[0]);
     var green = Math.round(gradFactor * gradMatrix[1]);
     var blue = Math.round(gradFactor * gradMatrix[2]);
-    // console.log("rgb(" + red + "," + green + "," + blue + ")");
     return "rgb(" + red + "," + green + "," + blue + ")";
 }
 

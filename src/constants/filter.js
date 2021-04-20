@@ -29,12 +29,10 @@ const data = [
 ]
 
 function filter(value, keys) {
-    console.log(value);
     var tmp = data.find((el) => el.id === value)
     if (value === "All") {
         return keys
     }
-    console.log(tmp);
     if (tmp) {
         return tmp.data
     } else {
